@@ -34,7 +34,10 @@ const RoutineCard: React.FC<RoutineCardProps> = ({
   // Format duration
   const formatDuration = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
-    return `${minutes} min`;
+    const secs = seconds % 60;
+    if (minutes > 0 && secs > 0) return `${minutes} min ${secs} sec`;
+    if (minutes > 0) return `${minutes} min`;
+    return `${secs} sec`;
   };
   
   return (
@@ -89,14 +92,18 @@ const RoutineCard: React.FC<RoutineCardProps> = ({
             onClick={onDuplicate}
             className="p-2"
             icon={<Copy size={16} />}
-          />
+          >
+            {''}
+          </Button>
           
           <Button
             variant="ghost"
             onClick={onDelete}
             className="p-2 text-red-500 hover:text-red-700"
             icon={<Trash size={16} />}
-          />
+          >
+            {''}
+          </Button>
         </div>
       </div>
     </Card>

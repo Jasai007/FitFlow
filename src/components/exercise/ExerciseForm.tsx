@@ -20,31 +20,29 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({
   const [duration, setDuration] = useState(initialValues?.duration || 60);
   const [type, setType] = useState<ExerciseType>(initialValues?.type || 'strength');
   const [notes, setNotes] = useState(initialValues?.notes || '');
+  const [mode, setMode] = useState<'reps' | 'time'>(initialValues?.duration && initialValues.duration > 0 ? 'time' : 'reps');
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate form
     if (!name.trim()) return;
-    
-    const exerciseData = {
+    const exerciseData: any = {
       name: name.trim(),
       sets: Math.max(1, sets),
-      reps: Math.max(1, reps),
-      duration: Math.max(5, duration),
       type,
       notes: notes.trim()
     };
-    
+    if (mode === 'reps') {
+      exerciseData.reps = Math.max(1, reps);
+      exerciseData.duration = 0;
+    } else {
+      exerciseData.duration = Math.max(5, duration);
+      exerciseData.reps = 0;
+    }
     if (initialValues?.id) {
-      // Editing: include id
       onSubmit({ ...exerciseData, id: initialValues.id });
     } else {
-      // Creating: omit id
       onSubmit(exerciseData);
     }
-    
-    // Reset form if not editing
     if (!initialValues) {
       setName('');
       setSets(3);
@@ -52,6 +50,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({
       setDuration(60);
       setType('strength');
       setNotes('');
+      setMode('reps');
     }
   };
   
@@ -72,6 +71,26 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({
         />
       </div>
       
+      <div className="mb-2">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Exercise Mode</label>
+        <div className="flex space-x-2">
+          <button
+            type="button"
+            className={`px-3 py-1 rounded-full border ${mode === 'reps' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'} border-blue-600`}
+            onClick={() => setMode('reps')}
+          >
+            Reps-based
+          </button>
+          <button
+            type="button"
+            className={`px-3 py-1 rounded-full border ${mode === 'time' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700'} border-blue-600`}
+            onClick={() => setMode('time')}
+          >
+            Time-based
+          </button>
+        </div>
+      </div>
+      
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label htmlFor="sets" className="block text-sm font-medium text-gray-700 mb-1">
@@ -86,34 +105,35 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({
             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
-        
-        <div>
-          <label htmlFor="reps" className="block text-sm font-medium text-gray-700 mb-1">
-            Reps
-          </label>
-          <input
-            type="number"
-            id="reps"
-            min="1"
-            value={reps}
-            onChange={(e) => setReps(parseInt(e.target.value) || 1)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-      </div>
-      
-      <div>
-        <label htmlFor="duration" className="block text-sm font-medium text-gray-700 mb-1">
-          Duration (seconds)
-        </label>
-        <input
-          type="number"
-          id="duration"
-          min="5"
-          value={duration}
-          onChange={(e) => setDuration(parseInt(e.target.value) || 5)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-        />
+        {mode === 'reps' ? (
+          <div>
+            <label htmlFor="reps" className="block text-sm font-medium text-gray-700 mb-1">
+              Reps
+            </label>
+            <input
+              type="number"
+              id="reps"
+              min="1"
+              value={reps}
+              onChange={(e) => setReps(parseInt(e.target.value) || 1)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        ) : (
+          <div>
+            <label htmlFor="duration" className="block text-sm font-medium text-gray-700 mb-1">
+              Duration (seconds)
+            </label>
+            <input
+              type="number"
+              id="duration"
+              min="5"
+              value={duration}
+              onChange={(e) => setDuration(parseInt(e.target.value) || 5)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        )}
       </div>
       
       <div>

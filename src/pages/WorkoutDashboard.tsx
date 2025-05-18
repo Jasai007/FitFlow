@@ -144,6 +144,13 @@ const WorkoutDashboard: React.FC = () => {
                   exercise={currentExercise}
                   isCompleted={isExerciseCompleted(currentExercise.id)}
                   onComplete={() => completeExercise(currentExercise.id)}
+                  onRestart={() => {
+                    // Remove from completedExercises
+                    const idx = completedExercises.indexOf(currentExercise.id);
+                    if (idx !== -1) {
+                      completedExercises.splice(idx, 1);
+                    }
+                  }}
                 />
               </div>
             )}
