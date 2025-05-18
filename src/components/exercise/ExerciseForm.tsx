@@ -100,9 +100,8 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({
             <input
               type="number"
               id="sets"
-              min="1"
               value={sets}
-              onChange={(e) => setSets(parseInt(e.target.value) || 1)}
+              onChange={(e) => setSets(parseInt(e.target.value) || 0)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
@@ -115,9 +114,8 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({
             <input
               type="number"
               id="reps"
-              min="1"
               value={reps}
-              onChange={(e) => setReps(parseInt(e.target.value) || 1)}
+              onChange={(e) => setReps(parseInt(e.target.value) || 0)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
