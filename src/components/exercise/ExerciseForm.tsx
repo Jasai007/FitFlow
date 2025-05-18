@@ -92,19 +92,21 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({
       </div>
       
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="sets" className="block text-sm font-medium text-gray-700 mb-1">
-            Sets
-          </label>
-          <input
-            type="number"
-            id="sets"
-            min="1"
-            value={sets}
-            onChange={(e) => setSets(parseInt(e.target.value) || 1)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
+        {mode === 'reps' && (
+          <div>
+            <label htmlFor="sets" className="block text-sm font-medium text-gray-700 mb-1">
+              Sets
+            </label>
+            <input
+              type="number"
+              id="sets"
+              min="1"
+              value={sets}
+              onChange={(e) => setSets(parseInt(e.target.value) || 1)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        )}
         {mode === 'reps' ? (
           <div>
             <label htmlFor="reps" className="block text-sm font-medium text-gray-700 mb-1">
@@ -127,9 +129,8 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({
             <input
               type="number"
               id="duration"
-              min="5"
               value={duration}
-              onChange={(e) => setDuration(parseInt(e.target.value) || 5)}
+              onChange={(e) => setDuration(parseInt(e.target.value) || 0)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>

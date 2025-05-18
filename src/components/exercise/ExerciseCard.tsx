@@ -81,9 +81,15 @@ const ExerciseCard: React.FC<ExerciseCardProps> = ({
         <div className={`inline-block px-3 py-1 text-sm text-white rounded-full ${getTypeColor(exercise.type)} mb-2`}>
           {exercise.type}
         </div>
-        <div className="text-lg text-gray-700 mb-1">
-          {exercise.sets} sets × {exercise.reps} reps
-        </div>
+        {exercise.duration > 0 ? (
+          <div className="text-lg text-gray-700 mb-1">
+            Duration: {exercise.duration} seconds
+          </div>
+        ) : (
+          <div className="text-lg text-gray-700 mb-1">
+            {exercise.sets} sets × {exercise.reps} reps
+          </div>
+        )}
         {exercise.notes && <div className="text-sm text-gray-500 italic">{exercise.notes}</div>}
       </div>
 
