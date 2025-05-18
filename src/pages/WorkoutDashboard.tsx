@@ -7,7 +7,7 @@ import Button from '../components/ui/Button';
 import ExerciseCard from '../components/exercise/ExerciseCard';
 import { useWorkout } from '../hooks/useWorkout';
 import { getRoutines } from '../utils/storage';
-import { Play, AlertCircle, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Play, AlertCircle, ChevronRight, ChevronLeft, RotateCcw } from 'lucide-react';
 
 const WorkoutDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const WorkoutDashboard: React.FC = () => {
     progress
   } = useWorkout();
   
-  const [availableRoutines, setAvailableRoutines] = useState([]);
+  const [availableRoutines, setAvailableRoutines] = useState<any[]>([]); // Fix type error
   
   // Load available routines
   useEffect(() => {
@@ -78,7 +78,7 @@ const WorkoutDashboard: React.FC = () => {
           <h2 className="text-xl font-semibold mb-4">Select a Routine</h2>
           
           <div className="space-y-3">
-            {availableRoutines.map(routine => (
+            {availableRoutines.map((routine: any) => (
               <Card
                 key={routine.id}
                 hoverable
@@ -96,8 +96,8 @@ const WorkoutDashboard: React.FC = () => {
                 <Button
                   variant="ghost"
                   icon={<Play size={18} />}
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={() => {
+                    // @ts-ignore
                     startWorkout(routine.id);
                   }}
                 >
@@ -227,15 +227,28 @@ const WorkoutDashboard: React.FC = () => {
               </div>
             </div>
             
-            {/* End workout button */}
-            <Button
-              variant="primary"
-              fullWidth
-              size="lg"
-              onClick={handleEndWorkout}
-            >
-              End Workout
-            </Button>
+            {/* End workout and restart buttons */}
+            <div className="flex flex-col gap-3">
+              <Button
+                variant="primary"
+                fullWidth
+                size="lg"
+                onClick={handleEndWorkout}
+              >
+                End Workout
+              </Button>
+              <Button
+                variant="secondary"
+                fullWidth
+                size="lg"
+                icon={<RotateCcw size={18} />}
+                onClick={() => {
+                  if (routine) startWorkout(routine.id);
+                }}
+              >
+                Restart Exercises
+              </Button>
+            </div>
           </>
         )}
       </div>

@@ -4,7 +4,7 @@ import Button from '../ui/Button';
 import { generateId, getExerciseTypeOptions } from '../../utils/helpers';
 
 interface ExerciseFormProps {
-  onSubmit: (exercise: Omit<Exercise, 'id'>) => void;
+  onSubmit: (exercise: Omit<Exercise, 'id'> | Exercise) => void;
   initialValues?: Exercise;
   onCancel?: () => void;
 }
@@ -27,14 +27,22 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({
     // Validate form
     if (!name.trim()) return;
     
-    onSubmit({
+    const exerciseData = {
       name: name.trim(),
       sets: Math.max(1, sets),
       reps: Math.max(1, reps),
       duration: Math.max(5, duration),
       type,
       notes: notes.trim()
-    });
+    };
+    
+    if (initialValues?.id) {
+      // Editing: include id
+      onSubmit({ ...exerciseData, id: initialValues.id });
+    } else {
+      // Creating: omit id
+      onSubmit(exerciseData);
+    }
     
     // Reset form if not editing
     if (!initialValues) {
